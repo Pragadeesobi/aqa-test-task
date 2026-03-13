@@ -1,0 +1,327 @@
+<testsuites id="" name="" tests="11" failures="0" skipped="0" errors="0" time="100.99402099999999">
+<testsuite name="auth.spec.ts" timestamp="2026-03-13T08:30:11.858Z" hostname="chromium" tests="5" failures="0" skipped="0" time="33.496" errors="0">
+<testcase name="Authentication › should register a new user" classname="auth.spec.ts" time="8.936">
+<system-out>
+<![CDATA[Registration started
+Clicked: a[href="/register"]
+Clicked register link
+Filled register username: testuserph4pv
+Filled register email: testzn2x9@example.com
+Filled register password: password123
+Clicked: span:has-text("Create account")
+Clicked create account button
+Assertion passed: Registration heading for testuserph4pv is visible.
+Registration successful for username: testuserph4pv
+]]>
+</system-out>
+</testcase>
+<testcase name="Authentication › should login with existing user" classname="auth.spec.ts" time="11.67">
+<system-out>
+<![CDATA[Login started for username: testuser (attempt 1)
+Filled username: testuser
+Filled password: password123
+Clicked: span:has-text("Login")
+Clicked login button
+Assertion passed: Login heading for testuser is visible.
+Login successful for username: testuser
+Logout started
+Clicked: svg.fa-chevron-down
+Clicked dropdown
+Clicked: button.dropdown-item:has-text("Logout")
+Clicked logout button
+Logout successful, login button visible
+]]>
+</system-out>
+</testcase>
+<testcase name="Authentication › should show error for invalid login credentials" classname="auth.spec.ts" time="5.915">
+<system-out>
+<![CDATA[Clicked: span:has-text("Login")
+Login error message displayed: Wrong username or password.
+]]>
+</system-out>
+</testcase>
+<testcase name="Authentication › should show validation errors for invalid registration input" classname="auth.spec.ts" time="2.44">
+<system-out>
+<![CDATA[Clicked: a[href="/register"]
+Pressed Enter key
+Register username validation message: Please provide a username.
+Register email validation message: Please enter a valid email address.
+Register password validation message: Password must have at least 8 characters.
+]]>
+</system-out>
+</testcase>
+<testcase name="Authentication › should show error for existing username on registration" classname="auth.spec.ts" time="4.535">
+<system-out>
+<![CDATA[Clicked: a[href="/register"]
+Clicked: span:has-text("Create account")
+Register error message displayed: A user with this username already exists.
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="teams.spec.ts" timestamp="2026-03-13T08:30:11.858Z" hostname="chromium" tests="6" failures="0" skipped="0" time="95.449" errors="0">
+<testcase name="Teams CRUD › should create a team" classname="teams.spec.ts" time="17.192">
+<system-out>
+<![CDATA[Login started for username: testuser (attempt 1)
+Filled username: testuser
+Filled password: password123
+Clicked: span:has-text("Login")
+Clicked login button
+Assertion passed: Login heading for testuser is visible.
+Login successful for username: testuser
+Clicked: a[href="/teams"]
+Navigated to Teams page
+Clicked: span:has-text("Create a team")
+Clicked create team button
+Filled input#teamName, input#teamtext with value: cricket
+Filled team name: cricket
+Clicked: span:has-text("Create")
+Clicked create button
+Toast message visible: Success
+Success toast asserted
+Clicked team list item: cricket
+Filled team description: A team for cricket lovers
+Clicked: span:has-text("Save")
+Clicked save button
+Toast message visible: Success
+Success toast asserted
+Team visible: cricket
+Team created: cricket
+Team visible: cricket
+Team "cricket" created and visible
+Logout started
+Clicked: svg.fa-chevron-down
+Clicked dropdown
+Clicked: button.dropdown-item:has-text("Logout")
+Clicked logout button
+Logout successful, login button visible
+]]>
+</system-out>
+</testcase>
+<testcase name="Teams CRUD › should read a team" classname="teams.spec.ts" time="17.578">
+<system-out>
+<![CDATA[Login started for username: testuser (attempt 1)
+Filled username: testuser
+Filled password: password123
+Clicked: span:has-text("Login")
+Clicked login button
+Assertion passed: Login heading for testuser is visible.
+Login successful for username: testuser
+Clicked: a[href="/teams"]
+Navigated to Teams page
+Clicked: span:has-text("Create a team")
+Clicked create team button
+Filled input#teamName, input#teamtext with value: basketball
+Filled team name: basketball
+Clicked: span:has-text("Create")
+Clicked create button
+Toast message visible: Success
+Success toast asserted
+Clicked team list item: basketball
+Filled team description: Team for reading test
+Clicked: span:has-text("Save")
+Clicked save button
+Toast message visible: Success
+Success toast asserted
+Team visible: basketball
+Team created: basketball
+Clicked team list item: basketball
+Edit header visible for team: basketball
+Team "basketball" read successfully
+Logout started
+Clicked: svg.fa-chevron-down
+Clicked dropdown
+Clicked: button.dropdown-item:has-text("Logout")
+Clicked logout button
+Logout successful, login button visible
+]]>
+</system-out>
+</testcase>
+<testcase name="Teams CRUD › should update a team" classname="teams.spec.ts" time="15.353">
+<system-out>
+<![CDATA[Login started for username: testuser (attempt 1)
+Filled username: testuser
+Filled password: password123
+Clicked: span:has-text("Login")
+Clicked login button
+Assertion passed: Login heading for testuser is visible.
+Login successful for username: testuser
+Clicked: a[href="/teams"]
+Navigated to Teams page
+Clicked: span:has-text("Create a team")
+Clicked create team button
+Filled input#teamName, input#teamtext with value: football
+Filled team name: football
+Clicked: span:has-text("Create")
+Clicked create button
+Toast message visible: Success
+Success toast asserted
+Clicked team list item: football
+Filled team description: Team for update test
+Clicked: span:has-text("Save")
+Clicked save button
+Toast message visible: Success
+Success toast asserted
+Team visible: football
+Team created: football
+Clicked team list item: football
+Edit header visible for team: football
+Filled input#teamName, input#teamtext with value: soccer
+Filled team name: soccer
+Clicked: span:has-text("Save")
+Clicked save button
+Toast message visible: Success
+Success toast asserted
+Clicked: a[href="/teams"]
+Navigated to Teams page
+Clicked team list item: soccer
+Edit header visible for team: soccer
+Team name updated from football to soccer
+Team visible: soccer
+Team updated from "football" to "soccer"
+Logout started
+Clicked: svg.fa-chevron-down
+Clicked dropdown
+Clicked: button.dropdown-item:has-text("Logout")
+Clicked logout button
+Logout successful, login button visible
+]]>
+</system-out>
+</testcase>
+<testcase name="Teams CRUD › should delete a team" classname="teams.spec.ts" time="15.289">
+<system-out>
+<![CDATA[Login started for username: testuser (attempt 1)
+Filled username: testuser
+Filled password: password123
+Clicked: span:has-text("Login")
+Clicked login button
+Assertion passed: Login heading for testuser is visible.
+Login successful for username: testuser
+Clicked: a[href="/teams"]
+Navigated to Teams page
+Clicked: span:has-text("Create a team")
+Clicked create team button
+Filled input#teamName, input#teamtext with value: hockey
+Filled team name: hockey
+Clicked: span:has-text("Create")
+Clicked create button
+Toast message visible: Success
+Success toast asserted
+Clicked team list item: hockey
+Filled team description: Team for delete test
+Clicked: span:has-text("Save")
+Clicked save button
+Toast message visible: Success
+Success toast asserted
+Team visible: hockey
+Team created: hockey
+Clicked team list item: hockey
+Clicked: button.is-danger svg.fa-trash-can
+Clicked delete team button
+Clicked: span:has-text("Do it!")
+Clicked confirm delete button
+Toast message visible: Success
+Success toast asserted
+Team deleted: hockey
+Clicked: a[href="/teams"]
+Navigated to Teams page
+Team not visible: hockey
+Team "hockey" deleted successfully
+Logout started
+Clicked: svg.fa-chevron-down
+Clicked dropdown
+Clicked: button.dropdown-item:has-text("Logout")
+Clicked logout button
+Logout successful, login button visible
+]]>
+</system-out>
+</testcase>
+<testcase name="Teams CRUD › should show error for empty team name on create" classname="teams.spec.ts" time="12.973">
+<system-out>
+<![CDATA[Login started for username: testuser (attempt 1)
+Filled username: testuser
+Filled password: password123
+Clicked: span:has-text("Login")
+Clicked login button
+Assertion passed: Login heading for testuser is visible.
+Login successful for username: testuser
+Clicked: a[href="/teams"]
+Navigated to Teams page
+Clicked: span:has-text("Create a team")
+Clicked create team button
+Filled input#teamName, input#teamtext with value: 
+Filled team name: 
+Create button is disabled
+Clicked: button.close
+Clicked close button
+Create button is disabled for empty team name
+Logout started
+Clicked: svg.fa-chevron-down
+Clicked dropdown
+Clicked: button.dropdown-item:has-text("Logout")
+Clicked logout button
+Logout successful, login button visible
+]]>
+</system-out>
+</testcase>
+<testcase name="Teams CRUD › should allow creating teams with duplicate names" classname="teams.spec.ts" time="17.064">
+<system-out>
+<![CDATA[Login started for username: testuser (attempt 1)
+Filled username: testuser
+Filled password: password123
+Clicked: span:has-text("Login")
+Clicked login button
+Assertion passed: Login heading for testuser is visible.
+Login successful for username: testuser
+Clicked: a[href="/teams"]
+Navigated to Teams page
+Clicked: span:has-text("Create a team")
+Clicked create team button
+Filled input#teamName, input#teamtext with value: tennis
+Filled team name: tennis
+Clicked: span:has-text("Create")
+Clicked create button
+Toast message visible: Success
+Success toast asserted
+Clicked team list item: tennis
+Filled team description: First team
+Clicked: span:has-text("Save")
+Clicked save button
+Toast message visible: Success
+Success toast asserted
+Team visible: tennis
+Team created: tennis
+Team visible: tennis
+Clicked: a[href="/teams"]
+Navigated to Teams page
+Clicked: span:has-text("Create a team")
+Clicked create team button
+Filled input#teamName, input#teamtext with value: tennis
+Filled team name: tennis
+Clicked: span:has-text("Create")
+Clicked create button
+Toast message visible: Success
+Success toast asserted
+Clicked team list item: tennis
+Filled team description: Duplicate description
+Clicked: span:has-text("Save")
+Clicked save button
+Toast message visible: Success
+Success toast asserted
+Team visible: tennis
+Team created: tennis
+Clicked: a[href="/teams"]
+Navigated to Teams page
+Team "tennis" count in list: 4 (raw texts: ["cricket","basketball","soccer","tennis","tennis","cricket","basketball","soccer","tennis","tennis"])
+Duplicate team names are allowed
+Logout started
+Clicked: svg.fa-chevron-down
+Clicked dropdown
+Clicked: button.dropdown-item:has-text("Logout")
+Clicked logout button
+Logout successful, login button visible
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

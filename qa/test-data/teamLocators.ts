@@ -16,4 +16,5 @@ export const teamLocators = {
   deleteTeamButton: 'button.is-danger svg.fa-trash-can',
   confirmDeleteButton: 'span:has-text("Do it!")',
   leaveTeamButton: 'span:has-text("Leave team")',
+  closeModalButton: 'button:has(svg path[d^="M55.1 73.4"])',
 };

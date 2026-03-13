@@ -5,7 +5,6 @@ import { clickAndWait, waitForElement, generateRandomString } from '../utils/uiU
 export class VikunjaPage {
      
     constructor(private page: Page) {}
-    // Login locators
     async fillUsername(username: string) {
       try {
         await waitForElement(this.page, locators.login.username);
@@ -33,6 +32,19 @@ export class VikunjaPage {
       }
     }
 
+    async getLoginErrorText() {
+      try {
+        const errorLocator = this.page.locator(locators.login.errorMessage);
+        await expect(errorLocator).toBeVisible();
+        const text = await errorLocator.textContent();
+        const trimmed = text?.trim() ?? '';
+        console.log(`Login error message displayed: ${trimmed}`);
+        return trimmed;
+      } catch {
+        return '';
+      }
+    }
+
     async clickRegisterLink() {
       try {
         await waitForElement(this.page, locators.login.registerLink);
@@ -42,7 +54,6 @@ export class VikunjaPage {
       }
     }
 
-    // Register locators
     async fillRegisterUsername(username: string) {
       try {
         await waitForElement(this.page, locators.register.username);
@@ -70,12 +81,77 @@ export class VikunjaPage {
       }
     }
 
+    async getRegisterUsernameErrorText() {
+      try {
+        const usernameErrorLocator = this.page.locator(locators.register.usernameError);
+        await expect(usernameErrorLocator).toBeVisible();
+        const text = await usernameErrorLocator.textContent();
+        const trimmed = text?.trim() ?? '';
+        console.log(`Register username validation message: ${trimmed}`);
+        return trimmed;
+      } catch (error) {
+        console.error('Error reading register username error message:', error);
+        throw error;
+      }
+    }
+
+    async getRegisterEmailErrorText() {
+      try {
+        const emailErrorLocator = this.page.locator(locators.register.emailError);
+        await expect(emailErrorLocator).toBeVisible();
+        const text = await emailErrorLocator.textContent();
+        const trimmed = text?.trim() ?? '';
+        console.log(`Register email validation message: ${trimmed}`);
+        return trimmed;
+      } catch (error) {
+        console.error('Error reading register email error message:', error);
+        throw error;
+      }
+    }
+
+    async getRegisterPasswordErrorText() {
+      try {
+        const passwordErrorLocator = this.page.locator(locators.register.passwordError);
+        await expect(passwordErrorLocator).toBeVisible();
+        const text = await passwordErrorLocator.textContent();
+        const trimmed = text?.trim() ?? '';
+        console.log(`Register password validation message: ${trimmed}`);
+        return trimmed;
+      } catch (error) {
+        console.error('Error reading register password error message:', error);
+        throw error;
+      }
+    }
+
+    async getRegisterErrorText() {
+      try {
+        const errorLocator = this.page.locator(locators.register.errorMessage);
+        await expect(errorLocator).toBeVisible();
+        const text = await errorLocator.textContent();
+        const trimmed = text?.trim() ?? '';
+        console.log(`Register error message displayed: ${trimmed}`);
+        return trimmed;
+      } catch (error) {
+        console.error('Error reading register error message:', error);
+        throw error;
+      }
+    }
+
     async clickCreateAccountButton() {
       try {
         await waitForElement(this.page, locators.register.createAccountButton);
         await clickAndWait(this.page, locators.register.createAccountButton);
       } catch (error) {
         console.error('Error clicking create account button:', error);
+      }
+    }
+
+    async pressEnter() {
+      try {
+        await this.page.keyboard.press('Enter');
+        console.log('Pressed Enter key');
+      } catch (error) {
+        console.error('Error pressing Enter key:', error);
       }
     }
   
@@ -107,22 +183,39 @@ export class VikunjaPage {
   async goto(path = '/') {
     try {
       await this.page.goto(path);
+      await this.page.waitForLoadState('domcontentloaded');
       await waitForElement(this.page, 'body');
     } catch (error) {
       console.error('Error in goto:', error);
     }
   }
 
-  async login(username: string, password: string) {
+  async login(username: string, password: string, attempt = 1): Promise<void> {
     try {
-      console.log(`Login started for username: ${username}`);
+      console.log(`Login started for username: ${username} (attempt ${attempt})`);
       await this.fillUsername(username);
       console.log(`Filled username: ${username}`);
       await this.fillPassword(password);
       console.log(`Filled password: ${password}`);
+      await this.page.waitForTimeout(2000); // Delay to avoid rate limiting
       await this.clickLoginButton();
       console.log('Clicked login button');
-      await waitForElement(this.page, 'body'); // Wait for dashboard
+
+      // Wait for either success or an error message to appear
+      await Promise.race([
+        this.page.waitForSelector(locators.heading(username), { state: 'visible', timeout: 5000 }),
+        this.page.waitForSelector(locators.login.errorMessage, { state: 'visible', timeout: 5000 }),
+      ]);
+
+      const errorText = await this.getLoginErrorText();
+      if (errorText) {
+        console.warn(`Danger message detected: "${errorText}". Waiting 20 seconds then reloading login page...`);
+        await this.page.waitForTimeout(20000);
+        await this.goto('/');
+        await this.page.waitForTimeout(2000);
+        return this.login(username, password, attempt + 1);
+      }
+
       await this.assertLoginSuccess(username);
       console.log(`Login successful for username: ${username}`);
     } catch (error) {
@@ -153,6 +246,20 @@ export class VikunjaPage {
       return randomUser;
     } catch (error) {
       console.error('Error in register:', error);
+      throw error;
+    }
+  }
+
+  async logout() {
+    try {
+      console.log('Logout started');
+      await clickAndWait(this.page, locators.logout.dropdown);
+      console.log('Clicked dropdown');      await this.page.waitForSelector(locators.logout.button, { state: 'visible', timeout: 2000 });      await clickAndWait(this.page, locators.logout.button);
+      console.log('Clicked logout button');
+      await waitForElement(this.page, locators.login.loginButton);
+      console.log('Logout successful, login button visible');
+    } catch (error) {
+      console.error('Error in logout:', error);
       throw error;
     }
   }

@@ -22,7 +22,10 @@ This project contains automated tests for the Vikunja to-do application using Ty
 
 ### Minimal Coverage
 - User registration and login
+- Registration error handling (duplicate username)
 - CRUD for teams (Create, Read, Update, Delete)
+- Validation errors (empty team name, invalid fields)
+- Duplicate team names handling (allowed, counted)
 
 ### Advanced Features Implemented
 - **Page Object Model**: TeamsPage class with granular methods for all team operations, including error handling and logging.

@@ -3,9 +3,10 @@ import { teamLocators } from '../test-data/teamLocators';
 import { clickAndWait, fillAndAssert, assertToast } from '../utils/uiUtils';
 
 export class TeamsPage {
+  constructor(private page: Page) {}
+
   async assertEditHeader(name: string) {
     try {
-      // Escape quotes in team name for selector
       const headerSelector = `p.card-header-title:has-text('Edit Team "${name}"')`;
       await expect(this.page.locator(headerSelector)).toBeVisible();
       console.log(`Edit header visible for team: ${name}`);
@@ -146,12 +147,54 @@ export class TeamsPage {
       throw error;
     }
   }
-  // ...existing code...
-  constructor(private page: Page) {}
-  // ...existing code...
+
+  async assertTeamNotVisible(name: string) {
+    try {
+      await expect(this.page.locator(teamLocators.teamListItem(name))).not.toBeVisible();
+      console.log(`Team not visible: ${name}`);
+    } catch (error) {
+      console.error('Error asserting team not visible:', error);
+      throw error;
+    }
+  }
+
+  async assertCreateButtonDisabled() {
+    try {
+      await expect(this.page.locator(teamLocators.createButton)).toBeDisabled();
+      console.log('Create button is disabled');
+    } catch (error) {
+      console.error('Error asserting create button disabled:', error);
+      throw error;
+    }
+  }
+
+  async closeModal() {
+    try {
+      await clickAndWait(this.page, 'button.close');
+      console.log('Clicked close button');
+    } catch (error) {
+      console.error('Error closing modal:', error);
+      throw error;
+    }
+  }
+
+  async getTeamCount(name: string): Promise<number> {
+    try {
+      // Count only team entries in the teams list (<ul class="teams box">)
+      const listItems = this.page.locator('ul.teams.box li');
+      const texts = await listItems.allTextContents();
+      const normalized = name.trim().toLowerCase();
+      const matches = texts.filter((t) => t.trim().toLowerCase().includes(normalized));
+      const count = matches.length;
+      console.log(`Team "${name}" count in list: ${count} (raw texts: ${JSON.stringify(texts.slice(0, 10))})`);
+      return count;
+    } catch (error) {
+      console.error('Error getting team count:', error);
+      throw error;
+    }
+  }
 
   async gotoTeams() {
-      // ...existing code...
     try {
       await clickAndWait(this.page, teamLocators.sideNavTeams);
       await expect(this.page.locator(teamLocators.sideNavTeams)).toBeVisible();
@@ -163,7 +206,6 @@ export class TeamsPage {
   }
 
   async createTeam(name: string, description: string) {
-      // ...existing code...
     try {
       await this.clickCreateTeamButton();
       await this.fillTeamName(name);
@@ -185,16 +227,13 @@ export class TeamsPage {
 
   async assertTeamEditView(name: string) {
     try {
-      // Assert team edit header is visible
       const headerSelector = `p.card-header-title:has-text('Edit Team "${name}"')`;
       await expect(this.page.locator(headerSelector)).toBeVisible();
       console.log(`Assertion passed: Edit header for team ${name} is visible.`);
 
-      // Assert team description is displayed
       await expect(this.page.locator(teamLocators.teamDescriptionContainer)).toBeVisible();
       console.log('Assertion passed: Team description is visible.');
 
-      // Assert team members section is present
       await expect(this.page.locator(teamLocators.teamMembersHeader)).toBeVisible();
       console.log('Assertion passed: Team Members section is visible.');
     } catch (error) {
@@ -204,14 +243,12 @@ export class TeamsPage {
   }
 
   async editTeamName(oldName: string, newName: string) {
-      // ...existing code...
     try {
       await this.clickTeamListItem(oldName);
       await this.assertEditHeader(oldName);
       await this.fillTeamName(newName);
       await this.clickSaveButton();
       await this.assertSuccessToast();
-      // await this.page.pause();
       await this.gotoTeams();
       
       await this.clickTeamListItem(newName);
@@ -224,7 +261,6 @@ export class TeamsPage {
   }
 
   async addTeamMember(username: string) {
-      // ...existing code...
     try {
       await this.fillSearchUser(username);
       await this.clickUsername(username);
@@ -249,7 +285,6 @@ export class TeamsPage {
   }
 
   async deleteTeam(name: string) {
-      // ...existing code...
     try {
       await this.clickTeamListItem(name);
       await this.clickDeleteTeamButton();
@@ -263,7 +298,6 @@ export class TeamsPage {
   }
 
   async leaveTeam() {
-      // ...existing code...
     try {
       await clickAndWait(this.page, teamLocators.leaveTeamButton);
       await assertToast(this.page);
